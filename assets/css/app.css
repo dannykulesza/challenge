@@ -1,0 +1,51 @@
+.header-logo {
+  width: 500px;
+  height: 50px;
+  background: url(https://www.thescore.com/static/vectors/thescore-logo.svg) 0 2px no-repeat;
+  display: block;
+  background-size: auto 190%;
+}
+
+html {
+  background-color: #1e1f21 !important;
+}
+
+body {
+  background-color: #1e1f21;
+  color:#f9f9f9 !important;
+  font-family:'Inter', sans-serif;
+}
+
+input, select, textarea{
+  color:#f9f9f9 !important;
+  background-color: #1e1f21 !important;
+  margin-right: 5px;
+}
+
+th, td, .form_control{
+  color:#f9f9f9;
+  font-family:'Inter', sans-serif;
+  background-color: #1e1f21;
+}
+
+th.player {
+  width:30%;
+}
+
+th.stat {
+  width:5%;
+}
+
+.page-item.active .page-link {
+  background-color: #1e1f21;
+  border-color: #f9f9f9;
+}
+
+.page-link, .page-item{
+  color:#1e1f21;
+}
+
+.table-wrap {
+  height: 675px;
+  overflow-y: auto;
+}

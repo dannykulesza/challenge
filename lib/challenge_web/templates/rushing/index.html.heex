@@ -1,0 +1,79 @@
+<div class="row">
+  <h2 class="col">NFL Rushing Statistics</h2>
+  <div class="col">
+      <div class="input-group mb-2 justify-content-end">
+        <form phx-change="player_search">
+          <input class="form-control" type="text" name="filter" value={get_search_value(@filters, :player)} placeholder="Search Player ...">
+        </form>
+        <a class="btn btn-light" href={build_csv_download_link(@filters, @sort_by, @sort_order)} >CSV</a>
+      </div>
+  </div>
+</div>
+
+<div class="table-wrap">
+  <table class="table">
+    <thead>
+      <th class="player">Player</th>
+      <th class="stat">Team</th>
+      <th class="stat">Position</th>
+      <th class="stat">Att</th>
+      <th class="stat">Att/G</th>
+      <th class="text-decoration-underline stat" phx-click="sort" phx-value-col="yards">Yds</th>
+      <th class="stat">Avg</th>
+      <th class="stat">Yds/G</th>
+      <th class="text-decoration-underline stat" phx-click="sort" phx-value-col="touchdowns">TD</th>
+      <th class="text-decoration-underline stat" phx-click="sort" phx-value-col="lng">Lng</th>
+      <th class="stat">1st</th>
+      <th class="stat">1st%</th>
+      <th class="stat">20+</th>
+      <th class="stat">40+</th>
+      <th class="stat">FUM</th>
+    </thead>
+
+
+    <%= for stat <- @rushing_stats do %>
+      <tr>
+        <td><%= stat.player %></td>
+        <td><%= stat.team %></td>
+        <td><%= stat.position %></td>
+        <td><%= stat.attempts %></td>
+        <td><%= stat.attempts_per_game %></td>
+        <td><%= stat.yards %></td>
+        <td><%= stat.average %></td>
+        <td><%= stat.yards_per_game %></td>
+        <td><%= stat.touchdowns %></td>
+        <td><%= render_lng(stat) %></td>
+        <td><%= stat.first_downs %></td>
+        <td><%= stat.first_down_percentage %></td>
+        <td><%= stat.plus_20_runs %></td>
+        <td><%= stat.plus_40_runs %></td>
+        <td><%= stat.fumbles %></td>
+      </tr>
+    <% end %>
+  </table>
+</div>
+
+<nav>
+  <ul class="pagination justify-content-center">
+      <%= for element <- @page_numbers do %>
+          <%= case element do %>
+              <% %{type: :ellipsis} -> %>
+                  <li class="page-item disabled"><a class="page-link">…</a></li>
+              <% %{type: :current, page: page} -> %>
+                  <li class="page-item active"><a class="page-link"><%= page %></a></li>
+              <% %{type: :page, page: page} -> %>
+                  <li class="page-item" phx-click="page" phx-value-page={"#{page}"}>
+                    <a class="page-link"><%= page %></a>
+                  </li>
+              <% %{type: :prev, page: :disabled} -> %>
+                  <li class="page-item disabled"><a class="page-link">Prev</a></li>
+              <% %{type: :prev} -> %>
+                  <li class="page-item" phx-click="prev"><a class="page-link">Prev</a></li>
+              <% %{type: :next, page: :disabled} -> %>
+                  <li class="page-item disabled"><a class="page-link">Next</a></li>
+              <% %{type: :next} -> %>
+                  <li class="page-item" phx-click="next"><a class="page-link">Next</a></li>
+          <% end %>
+      <% end %>
+  </ul>
+</nav>
