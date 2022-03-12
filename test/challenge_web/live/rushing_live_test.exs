@@ -11,7 +11,7 @@ defmodule ChallengeWeb.Live.RushingLiveTest do
 
   @page_size Stats.page_size()
 
-  defp init_socket() do
+  defp init_socket do
     {:ok, socket} = RushingLive.mount(%{}, %{}, %LiveView.Socket{})
     socket
   end

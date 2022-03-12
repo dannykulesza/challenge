@@ -132,8 +132,7 @@ defmodule Challenge.StatsTest do
     end
 
     test "list_rushing_stats/1 returns all filtered and ordered by given params" do
-      expected_stats =
-        Enum.map(1..(@page_size + 1), &rushing_stat_fixture(%{touchdowns: &1}))
+      expected_stats = Enum.map(1..(@page_size + 1), &rushing_stat_fixture(%{touchdowns: &1}))
 
       [top_player | _] =
         stats = Stats.list_rushing_stats(%{sort_by: :touchdowns, sort_order: :desc, page: 2})

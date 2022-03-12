@@ -5,29 +5,30 @@ defmodule ChallengeWeb.RushingView do
   alias Challenge.Stats.RushingStat
 
   def render("rushing_stats.csv", %{rushing_stats: rushing_stats}) do
-    rows = Enum.map(rushing_stats, fn stat ->
-      [
-        stat.player,
-        stat.team,
-        stat.position,
-        stat.attempts,
-        stat.attempts_per_game,
-        stat.yards,
-        stat.average,
-        stat.yards_per_game,
-        stat.touchdowns,
-        render_lng(stat),
-        stat.first_downs,
-        stat.first_down_percentage,
-        stat.plus_20_runs,
-        stat.plus_40_runs,
-        stat.fumbles
-      ]
-    end)
+    rows =
+      Enum.map(rushing_stats, fn stat ->
+        [
+          stat.player,
+          stat.team,
+          stat.position,
+          stat.attempts,
+          stat.attempts_per_game,
+          stat.yards,
+          stat.average,
+          stat.yards_per_game,
+          stat.touchdowns,
+          render_lng(stat),
+          stat.first_downs,
+          stat.first_down_percentage,
+          stat.plus_20_runs,
+          stat.plus_40_runs,
+          stat.fumbles
+        ]
+      end)
 
     [RushingStat.csv_headers() | rows]
-      |> CSV.encode()
-      |> Enum.to_list()
+    |> CSV.encode()
+    |> Enum.to_list()
   end
 
   defp build_csv_download_link(filters, sort_by, sort_order) do

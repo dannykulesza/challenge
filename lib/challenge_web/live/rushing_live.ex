@@ -1,4 +1,7 @@
 defmodule ChallengeWeb.RushingLive do
+  @moduledoc """
+    LiveView for NFL rushing statistics
+  """
   use ChallengeWeb, :live_view
 
   alias Challenge.Stats
@@ -31,7 +34,7 @@ defmodule ChallengeWeb.RushingLive do
   end
 
   def handle_event("player_search", %{"filter" => filter}, %{assigns: assigns} = socket) do
-    filters =  Keyword.put(assigns.filters, :player, filter)
+    filters = Keyword.put(assigns.filters, :player, filter)
     {:noreply, update_socket(socket, assigns, %{filters: filters})}
   end
 
@@ -66,10 +69,11 @@ defmodule ChallengeWeb.RushingLive do
     })
   end
 
-  defp get_sort_assigns(column, %{sort_by: sort_by, sort_order: sort_order}) when column == sort_by, do: %{sort_by: sort_by, sort_order: reverse_order(sort_order)}
+  defp get_sort_assigns(column, %{sort_by: sort_by, sort_order: sort_order})
+       when column == sort_by,
+       do: %{sort_by: sort_by, sort_order: reverse_order(sort_order)}
 
-  defp get_sort_assigns(column, _assigns), do:
-  %{sort_by: column, sort_order: :desc}
+  defp get_sort_assigns(column, _assigns), do: %{sort_by: column, sort_order: :desc}
 
   defp reverse_order(:asc), do: :desc
   defp reverse_order(:desc), do: :asc

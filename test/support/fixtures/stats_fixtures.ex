@@ -49,5 +49,5 @@ defmodule Challenge.StatsFixtures do
 
   defp random_int(length \\ 100), do: :rand.uniform(length)
   defp random_float(length \\ 50), do: :rand.uniform() * length
-  defp random_boolean(), do: Enum.random([true, false])
+  defp random_boolean, do: Enum.random([true, false])
 end

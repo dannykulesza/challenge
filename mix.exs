@@ -51,7 +51,9 @@ defmodule Challenge.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:scrivener_ecto, "~> 2.0"},
       {:numerator, "~> 0.2.0"},
-      {:csv, "~> 2.4.1"}
+      {:csv, "~> 2.4.1"},
+      {:credo, "~> 1.6.0", only: [:dev, :test], runtime: false},
+      {:sobelow, "~> 0.8", only: [:dev, :test], runtime: false}
     ]
   end
 
@@ -67,7 +69,12 @@ defmodule Challenge.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.deploy": ["esbuild default --minify", "phx.digest"]
+      "assets.deploy": ["esbuild default --minify", "phx.digest"],
+      check_code: [
+        "format --check-formatted",
+        "credo --strict --verbose",
+        "sobelow --verbose"
+      ]
     ]
   end
 end

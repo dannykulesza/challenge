@@ -1,4 +1,5 @@
 defmodule Challenge.Stats.RushingStat do
+  @moduledoc "NFL rushing statistics Ecto schema"
   use Ecto.Schema
   import Ecto.Changeset
 

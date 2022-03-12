@@ -12,7 +12,7 @@ defmodule Challenge.Stats do
   @page_size 15
 
   @spec page_size() :: integer()
-  def page_size(), do: @page_size
+  def page_size, do: @page_size
 
   @spec create_rushing_stat(map()) :: {:ok, RushingStat.t()} | {:error, term()}
   def create_rushing_stat(attrs \\ %{}) do
@@ -41,7 +41,9 @@ defmodule Challenge.Stats do
     |> order_by(^sort_fragment(params))
   end
 
-  defp build_filter(%{filters: filters}), do: Enum.reduce(filters, dynamic(true), &add_filter_fragment/2)
+  defp build_filter(%{filters: filters}),
+    do: Enum.reduce(filters, dynamic(true), &add_filter_fragment/2)
+
   defp build_filter(_params), do: dynamic(true)
 
   defp add_filter_fragment({field, filter}, dynamic) do
