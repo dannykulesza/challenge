@@ -9,11 +9,14 @@ RUN apt-get update && \
     apt-get clean
 
 # Install Phoenix packages
-RUN mix local.hex --force
+RUN mix local.hex --force && \
+    mix local.rebar --force && \
+    mix archive.install --force hex phx_new 1.6.6
 
 # Install node
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && apt-get install -y nodejs
 
+RUN mix deps.get
 RUN mix compile
 RUN npm install --prefix ./assets
 
