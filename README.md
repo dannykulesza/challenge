@@ -54,4 +54,7 @@ We will evaluate you on your ability to solve the problem defined in the require
 If you have any questions regarding requirements, do not hesitate to email your contact at theScore for clarification.
 
 ### Installation and running this solution
-... TODO
+1. Ensure [docker](https://docs.docker.com/get-docker/) and [docker-compose](https://docs.docker.com/compose/install/#install-compose) are installed and running on your local machine.
+2. Clone this repository to your local machine `git clone https://github.com/dannykulesza/challenge.git` and ensure `.challenge/` is your current working directory.
+3. Run `docker-compose up` and wait for postgres image to run and app image to build, seed and run.
+4. Visit `localhost:4000` to view solution.
