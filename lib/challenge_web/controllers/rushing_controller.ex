@@ -3,24 +3,68 @@ defmodule ChallengeWeb.RushingController do
 
   alias Challenge.Stats
 
+  @sort_bys [
+    "lng",
+    "touchdowns",
+    "yards"
+  ]
+
+  @sort_orders [
+    "asc",
+    "desc"
+  ]
+
+  @filters [
+    "player",
+    "team",
+    "position"
+  ]
+
   def download_csv(conn, %{"sort_by" => sort_by_param, "sort_order" => sort_order_param} = params) do
-    filter_param = Map.get(params, "filters", %{})
+    filters_param = Map.get(params, "filters", %{})
 
-    sort_by = String.to_existing_atom(sort_by_param)
-    sort_order = String.to_existing_atom(sort_order_param)
-    filters = Enum.map(filter_param, fn {k, v} -> {String.to_existing_atom(k), v} end)
+    with {:ok, sort_by} <- parse_param(:sort_by, sort_by_param),
+         {:ok, sort_order} <- parse_param(:sort_order, sort_order_param),
+         {:ok, filters} <- parse_param(:filters, filters_param) do
+      rushing_stats =
+        Stats.list_rushing_stats(%{filters: filters, sort_by: sort_by, sort_order: sort_order})
 
-    rushing_stats =
-      Stats.list_rushing_stats(%{filters: filters, sort_by: sort_by, sort_order: sort_order})
-
-    conn
-    |> put_resp_content_type("text/csv")
-    |> put_resp_header("cache-control", "max-age=120, public")
-    |> put_resp_header("content-disposition", "attachment; filename=\"rushing_stats.csv\"")
-    |> put_status(200)
-    |> render("rushing_stats.csv", %{rushing_stats: rushing_stats})
+      conn
+      |> put_resp_content_type("text/csv")
+      |> put_resp_header("content-disposition", "attachment; filename=\"rushing_stats.csv\"")
+      |> put_status(200)
+      |> render("rushing_stats.csv", %{rushing_stats: rushing_stats})
+    else
+      {:error, message} -> send_error_response(conn, message)
+    end
   end
 
   def download_csv(conn, _params),
-    do: put_status(conn, 400) |> json(%{message: "invalid parameters"})
+    do: send_error_response(conn, "invalid parameters")
+
+  defp parse_param(:sort_by, param) when param in @sort_bys and is_binary(param),
+    do: {:ok, String.to_existing_atom(param)}
+
+  defp parse_param(:sort_by, _param), do: {:error, "invalid parameter: sort_by"}
+
+  defp parse_param(:sort_order, param) when param in @sort_orders and is_binary(param),
+    do: {:ok, String.to_existing_atom(param)}
+
+  defp parse_param(:sort_order, _param), do: {:error, "invalid parameter: sort_order"}
+
+  defp parse_param(:filters, param) when is_map(param),
+    do: Enum.reduce_while(param, {:ok, []}, &parse_filter/2)
+
+  defp parse_param(:filters, _param), do: {:error, "invalid parameter: filters"}
+
+  def parse_filter({key, value}, {:ok, filters}) when key in @filters and is_binary(value) do
+    parsed_key = String.to_existing_atom(key)
+    updated_filters = [{parsed_key, value} | filters]
+    {:cont, {:ok, updated_filters}}
+  end
+
+  def parse_filter({key, _value}, _filters), do: {:halt, {:error, "invalid filter: #{key}"}}
+
+  defp send_error_response(conn, message),
+    do: conn |> put_status(400) |> json(%{message: message})
 end
