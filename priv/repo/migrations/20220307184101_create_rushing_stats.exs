@@ -23,5 +23,7 @@ defmodule Challenge.Repo.Migrations.CreateRushingStats do
 
       timestamps(type: :utc_datetime_usec)
     end
+
+    create index(:rushing_stats, [:player])
   end
 end
